@@ -1,7 +1,7 @@
 export DESIGN_NAME ?= SPECIFY_DESIGN_NAME
 export PLATFORM    = nangate45
 
-export VERILOG_FILES = ./designs/src/harness/*.v
+export VERILOG_FILES ?= ./designs/src/harness/*.v
 export SDC_FILE      = ./designs/src/harness/design.sdc
 
 export MERGED_LEF = ./platforms/nangate45/NangateOpenCellLibrary.mod.lef

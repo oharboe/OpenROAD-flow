@@ -51,7 +51,7 @@ The dependencies can either be obtained from a pre-compiled build export or
 built manually. See the [KLayout website](https://www.klayout.de/) for
 installation instructions.
 
-### Option 1: Installing build exports
+### Option 1: Installing build exports in CentOS 7
 1.  Clone the OpenROAD-flow repository
 ```
 git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow.git
@@ -63,7 +63,7 @@ git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow.git
 source setup_env.sh
 ```
 
-### Option 2: Building the tools using docker
+### Option 2: Building the tools using Docker from any operating system
 This build option leverages a multi-step docker flow to install the tools and
 dependencies to a runner image. To follow these instructions, you must have
 docker installed, permissions to run docker, and docker container network access
@@ -73,13 +73,24 @@ enabled. This step will create a runner image tagged as `openroad/flow`.
 git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow.git
 ```
 2. Ensure your docker daemon is running and `docker` is in your PATH, then run
-the docker build.
+the docker build. Plan 1 hour or so for this step on a modern machine with a good
+internet connection.
 ```
+cd OpenROAD-flow
 ./build_openroad.sh
 ```
-3. Start an interactive shell in a docker container using your user credentials
+3. Start an interactive shell in a docker container using your user credentials. This
+maps the OpenROAD-flow folder into the docker image to allow you to manipulate the
+files that the docker image operates on from the docker host machine.
 ```
 docker run -it -u $(id -u ${USER}):$(id -g ${USER}) openroad/flow bash
+```
+4. The command below runs a quick smoketest by pointing OpenROAD-flow to a folder with Verilog files
+and telling OpenROAD which module to use as a top-level Verilog module. The top level file
+must have signal named "clock". Start with a tiny sub-module to see that it goes through the
+the entire OpenROAD flow and produces a GDS file.
+```
+./openroad-smoketest path-to-verilog-files/ TopLevelName
 ```
 
 ### Option 3: Building the tools locally
