@@ -13,6 +13,9 @@ GENERATE_MEMORY = 1
 
 # Automatically pick a reasonable area and utilization
 
+# Reduce density from default, 0.30
+export PLACE_DENSITY = 0.15
+
 # Core utilization in %
 export CORE_UTILIZATION = 10.0
 # Core height / core width
