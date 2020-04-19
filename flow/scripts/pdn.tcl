@@ -18,7 +18,7 @@ if {![info exists standalone] || $standalone} {
 }
 
 if {[info exist ::env(PDN_CFG)]} {
-  pdngen $::env(PDN_CFG) -verbose
+#  pdngen $::env(PDN_CFG) -verbose
 }
 
 if {![info exists standalone] || $standalone} {
