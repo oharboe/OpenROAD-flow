@@ -21,7 +21,7 @@ GENERATE_MEMORY = 1
 # export PLACE_DENSITY = 0.15
 
 # Core utilization in %
-# export CORE_UTILIZATION = 10.0
+export CORE_UTILIZATION = 40.0
 # Core height / core width
 export CORE_ASPECT_RATIO = 1.0
 # Core margin in um
