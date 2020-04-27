@@ -18,10 +18,10 @@ GENERATE_MEMORY = 1
 # can dramatically incerase running times.
 
 # Reduce density from default, 0.30
-# export PLACE_DENSITY = 0.15
+export PLACE_DENSITY = 0.15
 
 # Core utilization in %
-export CORE_UTILIZATION = 40.0
+export CORE_UTILIZATION = 30.0
 # Core height / core width
 export CORE_ASPECT_RATIO = 1.0
 # Core margin in um
