@@ -33,7 +33,7 @@ source -verbose $::env(SCRIPTS_DIR)/io_placement.tcl
 source -verbose $::env(SCRIPTS_DIR)/tdms_place.tcl
 source -verbose $::env(SCRIPTS_DIR)/macro_place.tcl
 source -verbose $::env(SCRIPTS_DIR)/tapcell.tcl
-source -verbose $::env(SCRIPTS_DIR)/pdn.tcl
+#source -verbose $::env(SCRIPTS_DIR)/pdn.tcl
 
 # Place
 source -verbose $::env(SCRIPTS_DIR)/global_place.tcl
