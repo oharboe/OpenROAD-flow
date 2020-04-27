@@ -234,7 +234,7 @@ $(RESULTS_DIR)/2_6_floorplan_pdn.def: $(RESULTS_DIR)/2_5_floorplan_tapcell.def
 	($(TIME_CMD) $(OPENROAD_CMD) $(SCRIPTS_DIR)/pdn.tcl) 2>&1 | tee $(LOG_DIR)/2_6_pdn.log
 	@! grep --color -i "^Error:" $(LOG_DIR)/2_6_pdn.log
 
-$(RESULTS_DIR)/2_floorplan.def: $(RESULTS_DIR)/2_6_floorplan_pdn.def
+$(RESULTS_DIR)/2_floorplan.def: $(RESULTS_DIR)/2_5_floorplan_tapcell.def
 	cp $< $@
 
 $(RESULTS_DIR)/2_floorplan.v: $(RESULTS_DIR)/2_1_floorplan.def
