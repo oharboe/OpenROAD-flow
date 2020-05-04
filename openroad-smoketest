@@ -1,0 +1,11 @@
+#!/bin/bash
+set -ex
+VERILOG_FILES=$(readlink -f $1)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR
+
+# Map the Verilog folder into the Docker image and build them
+docker run -u $(id -u ${USER}):$(id -g ${USER}) \
+ -v $VERILOG_FILES/:$VERILOG_FILES/ \
+ -ti openroad/flow \
+ bash -c "set -ex && . ./setup_env.sh && cd flow && make DESIGN_CONFIG=./designs/harness.mk VERILOG_FILES=$VERILOG_FILES/*.v DESIGN_NAME=$2"

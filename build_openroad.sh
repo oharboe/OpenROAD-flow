@@ -37,17 +37,14 @@ while (( "$#" )); do
       OR_BRANCH="openroad"
       TR_BRANCH="openroad"
       shift
-      break
       ;;
     -o|--local)
       BUILD_METHOD="LOCAL"
       shift
-      break
       ;;
     -n|--no_init)
       NO_INIT=1
       shift
-      break
       ;;
     -*|--*=) # unsupported flags
       echo "[ERROR][FLOW-1000] Unsupported flag $1" >&2
@@ -107,6 +104,11 @@ elif [ "$build_method" == "LOCAL" ]; then
 
   mkdir -p tools/build/TritonRoute
   (cd tools/build/TritonRoute && cmake ../../TritonRoute && make -j$(nproc))
+
+  if [ -d flow/platforms/gf14 ]; then
+    mkdir -p tools/build/TritonRoute14
+    (cd tools/build/TritonRoute14 && cmake ../../TritonRoute14 && make -j$(nproc) && mv TritonRoute TritonRoute14)
+  fi
 
   mkdir -p tools/build/OpenROAD
   (cd tools/build/OpenROAD && cmake ../../OpenROAD && make -j$(nproc))
