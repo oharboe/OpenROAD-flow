@@ -35,16 +35,8 @@ proc find_macros {} {
 }
 
 
-set macros [find_macros]
-
-if {$macros != ""} {
-  # HACK! The TDMS placement is better than macro placement, possibly because
-  # timing is all wrong: tens of thousands of nanoseconds of negative slack
-  # in the buffer before RAMs
-  foreach macro $macros {
-    $macro setPlacementStatus LOCKED
-  }
-  # macro_placement -global_config $::env(IP_GLOBAL_CFG)
+if {[find_macros] != ""} {
+  macro_placement -global_config $::env(IP_GLOBAL_CFG)
 } else {
   puts "No macros found: Skipping macro_placement"
 }
