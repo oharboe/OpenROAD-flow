@@ -1,7 +1,7 @@
 version := "0.1"
 name := "tiny-tests"
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.11"
 
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-language:reflectiveCalls")
 
@@ -10,11 +10,10 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-language:refle
 // https://github.com/ucb-bar/chisel3/releases
 // https://github.com/ucb-bar/chisel-testers/releases
 val defaultVersions = Map(
-  "chisel3" -> "3.1.5",
-  "chisel-iotesters" -> "1.2.7"
+  "chisel3" -> "3.3.0",
 )
 
-libraryDependencies ++= (Seq("chisel3", "chisel-iotesters").map { dep: String =>
+libraryDependencies ++= (Seq("chisel3").map { dep: String =>
   "edu.berkeley.cs" %% dep % sys.props
     .getOrElse(dep + "Version", defaultVersions(dep)) withSources () withJavadoc ()
 })

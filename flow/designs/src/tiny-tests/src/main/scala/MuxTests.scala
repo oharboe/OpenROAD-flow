@@ -1,5 +1,6 @@
 import chisel3._
 import chisel3.util._
+import chisel3.stage._
 import java.nio.charset.StandardCharsets._
 import java.nio.file.{Files, Paths, StandardOpenOption}
 
@@ -38,29 +39,38 @@ class MuxTest(width: Int, inputNum: Int, outputNum: Int, pipeline: Int) extends 
       .map(ShiftRegister(_, pipeline))
 }
 
+class FanOutProblem() extends Module {
+  class FanOutProblemBundle extends Bundle {
+    val inValue = Input(Vec(5, Bool()))
+    val outValue = Output(Vec(1, Bool()))
+  }
+
+  val io = IO(new FanOutProblemBundle)
+
+  // Register retiming should take care of fan-out issues here...
+  val fanout = ShiftRegister(io.inValue, 10).reduce(_ || _)
+  io.outValue.foreach { _ := fanout }
+}
+
 /**
   * One simple way to edit these tests is:
   *
   * 1. Install Visual Studio Code
-  * 2. Install Scala Metals plug
+  * 2. Install Scala Metals plugin
   * 3. Edit
-  * 4. From within Visual Studio Code terminal, run "sbt "test:runMain GenerateTests"
+  * 4. From within Visual Studio Code terminal, run 'sbt "test:runMain GenerateTests"'
   *    to generate the tests.
   */
 object GenerateTests extends App {
 
-  def generateTest(testName: String, dut: () => Module) {
-    val testFile = testName + ".v"
-    chisel3.Driver.execute(Array[String]("--output-file", testFile), dut)
-
-    Files.write(
-      Paths.get(testFile),
-      new String(Files.readAllBytes(Paths.get(testFile)), UTF_8)
-        .replace("MuxTest", testName)
-        .getBytes("UTF8"),
-      StandardOpenOption.WRITE,
-      StandardOpenOption.CREATE
-    )
+  def generateTest(testFile: String, dut: () => Module) {
+    new ChiselStage()
+      .execute(
+        Array[String]("--output-file", testFile),
+        Seq(
+          ChiselGeneratorAnnotation(dut)
+        )
+      )
   }
 
   def muxTests() {
@@ -69,15 +79,32 @@ object GenerateTests extends App {
         val variants = Seq(1, 4, 8, 16)
         for (inputNum <- variants) {
           for (outputNum <- variants) {
+            val testName = "MuxTest_width_" + width + "_inputs_" + inputNum + "_outputs_" + outputNum + "_pipeline_" + pipeline
+            val testFile = testName + ".v"
+
             generateTest(
-              "MuxTest_width_" + width + "_inputs_" + inputNum + "_outputs_" + outputNum + "_pipeline_" + pipeline,
+              testFile,
               () => new MuxTest(width, inputNum, outputNum, pipeline)
+            )
+
+            Files.write(
+              Paths.get(testFile),
+              new String(Files.readAllBytes(Paths.get(testFile)), UTF_8)
+                .replace("MuxTest", testName)
+                .getBytes("UTF8"),
+              StandardOpenOption.WRITE,
+              StandardOpenOption.CREATE
             )
           }
         }
       }
     }
   }
+
+  generateTest(
+    "FanOutProblem.v",
+    () => new FanOutProblem
+  )
 
   muxTests
 }
